@@ -98,9 +98,7 @@ docs/
   EXAMPLE.md           # Real-world walkthrough
 
 evals/
-  test_qa_quality.py   # Q&A quality tests
-  test_ranking.py      # Ranking algorithm tests
-  test_performance.py  # Performance benchmarks
+  README.md            # Evaluation documentation
 
 assets/
   example_issue.json
@@ -212,11 +210,6 @@ All data stored in `~/.knowledge_base/`:
 ```bash
 # Run full test suite
 python3 tests/test_system.py
-
-# Run quality evaluations
-python3 evals/test_qa_quality.py
-python3 evals/test_ranking.py
-python3 evals/test_performance.py
 ```
 
 ## Performance
