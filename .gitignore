@@ -1,0 +1,123 @@
+# ============================================================================
+# PYTHON ARTIFACTS
+# ============================================================================
+
+# Compiled Python files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Python environment
+.Python
+venv/
+env/
+ENV/
+*.egg-info/
+.eggs/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Distribution artifacts
+build/
+dist/
+*.whl
+*.tar.gz
+
+# Testing and coverage
+.coverage
+.pytest_cache/
+htmlcov/
+*.cover
+.tox/
+
+
+# ============================================================================
+# DEVELOPMENT TOOLS & IDE
+# ============================================================================
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# JetBrains IDEs
+.idea/
+*.iml
+*.iws
+*.ipr
+.DS_Store
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim/Neovim
+*.swp
+*.swo
+*~
+.vim/
+
+# Emacs
+*~
+\#*\#
+.\#*
+
+# Temporary editor files
+*.bak
+*.tmp
+
+
+# ============================================================================
+# OPERATING SYSTEM
+# ============================================================================
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+*.swp
+.Spotlight-V100
+.Trashes
+
+# Windows
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+
+# ============================================================================
+# LOCAL USER DATA (Not tracked)
+# ============================================================================
+
+# Knowledge base - users manage their own ~/.knowledge_base/
+# This is created and maintained locally per user/machine
+.knowledge_base/
+
+# Local development files
+.env
+.env.local
+*.local
+config.local.json
+
+
+# ============================================================================
+# LOGS & TEMPORARY FILES
+# ============================================================================
+
+*.log
+logs/
+*.tmp
+tmp/
+temp/
+
+
+# ============================================================================
+# OS-SPECIFIC & SYSTEM FILES
+# ============================================================================
+
+# Lock files (if using package managers)
+Pipfile.lock
+
+# System temp
+.cache/
+*.cache

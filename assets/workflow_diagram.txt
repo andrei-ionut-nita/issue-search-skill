@@ -1,0 +1,123 @@
+POSTMORTEM KNOWLEDGE SKILL — WORKFLOW
+═══════════════════════════════════════════════════════════════════════
+
+CAPTURE PHASE (Day 1)
+─────────────────────────────────────────────────────────────────────
+  Production Incident
+        ↓
+    🎯 CAPTURE
+    └─ Issue description, symptoms, environment
+    └─ Time: 5 minutes
+    └─ Output: Issue record (UUID)
+        ↓
+    Issue saved to: ~/.knowledge_base/issues/YYYY-MM-DD/
+
+INVESTIGATION PHASE (Day 1)
+─────────────────────────────────────────────────────────────────────
+  Team Investigates
+        ↓
+    📊 ROOT CAUSE ANALYSIS
+    └─ What went wrong?
+    └─ Why did it happen?
+    └─ Time: N hours (depending on complexity)
+        ↓
+    🔧 FIND RESOLUTION
+    └─ What's the fix?
+    └─ What prevents recurrence?
+    └─ Time: Varies
+        ↓
+    ✓ INCIDENT RESOLVED
+
+POSTMORTEM PHASE (Day 1)
+─────────────────────────────────────────────────────────────────────
+  Knowledge Capture
+        ↓
+    📝 GENERATE POSTMORTEM
+    └─ Summary, root cause, resolution, prevention
+    └─ Time: 10 minutes
+        ↓
+    Postmortem saved to: ~/.knowledge_base/postmortems/YYYY-MM-DD/
+        ↓
+    🤖 AUTO-GENERATE Q&A
+    └─ Derive realistic question from symptoms
+    └─ Construct actionable answer
+    └─ Time: Automatic
+        ↓
+    Q&A entry saved to: ~/.knowledge_base/qa/qa_index.jsonl
+        ↓
+    📇 INDEX BY SYMPTOM
+    └─ Map symptoms → Q&A entries
+    └─ Time: Automatic
+        ↓
+    Symptom index updated: ~/.knowledge_base/symptom_index/
+
+KNOWLEDGE PHASE (Growing Over Time)
+─────────────────────────────────────────────────────────────────────
+  Month 1:   5 issues → 3 solutions captured
+  Month 3:   50% of new issues resolve via knowledge base
+  Month 6:   70% of new issues resolve via knowledge base
+  Year 1:    30+ solutions, new issues increasingly rare
+
+RETRIEVAL PHASE (Next Similar Issue, Day 45)
+─────────────────────────────────────────────────────────────────────
+  Production Incident (Similar)
+        ↓
+    🎯 CAPTURE
+    └─ Issue description, symptoms
+    └─ Time: 5 minutes
+        ↓
+    🔍 SEARCH
+    └─ python3 cli.py search --symptom timeout
+    └─ Time: < 1 second
+        ↓
+    📊 RANKING ALGORITHM
+    ┌─────────────────────────────────────────┐
+    │ Rank by Multi-Factor Score:             │
+    │  • Symptom match         50%             │
+    │  • Confidence            30%             │
+    │  • Recency               10%             │
+    │  • Usage frequency       10%             │
+    └─────────────────────────────────────────┘
+        ↓
+    ✨ INSTANT SOLUTION
+    └─ "Database connection pool exhaustion"
+    └─ Confidence: 0.89
+    └─ Previous uses: 5
+        ↓
+    ✓ ISSUE RESOLVED
+    └─ Time: 5 minutes (vs 2 hours originally)
+    └─ ROI: 12:1
+
+LEARNING PHASE (Continuous)
+─────────────────────────────────────────────────────────────────────
+  Each retrieval increases:
+    • Confidence (0.80 → 0.95)
+    • Usage count
+    • Ranking score
+
+  Solutions used repeatedly rise in ranking
+
+
+═══════════════════════════════════════════════════════════════════════
+
+TIMELINE EXAMPLE:
+
+  Day 1 (Issue #1)
+    14:30 — Production alert: database timeout
+    14:35 — Capture issue
+    16:30 — Root cause found: pool size
+    16:40 — Postmortem generated
+    16:41 — Q&A indexed, searchable
+    ↓
+  Day 45 (Issue #2, similar)
+    08:15 — Production alert: database timeout
+    08:20 — Capture issue
+    08:21 — Search knowledge base
+    08:22 — Find solution from Day 1
+    08:27 — Issue resolved
+    ↓
+  Time saved: 2 hours
+  Effort: 15 minutes (original) + 6 minutes (retrieval) = 21 minutes
+  ROI: 2 hours / 15 minutes = 12:1
+
+═══════════════════════════════════════════════════════════════════════

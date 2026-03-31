@@ -1,0 +1,18 @@
+{
+  "qa_id": "8a7c1d4e-91e7-4b2c-9f3a-5e2b8c1d9f4a",
+  "issue_id": "550e8400-e29b-41d4-a716-446655440000",
+  "question": "What causes database timeout during peak traffic and how do you fix it?",
+  "answer": "Database timeouts under peak load are usually caused by connection pool exhaustion. When concurrent requests exceed the pool size, new connections must wait or fail.\n\nRoot Cause:\nConnection pool size was 10, insufficient for 50+ concurrent requests during traffic spikes.\n\nSolution:\n1. Increase pool size to (max_concurrent_requests * 1.5) — in this case, 75\n2. Add exponential backoff for connection waits: 100ms → 200ms → 400ms\n3. Set connection timeout to fail fast rather than hang indefinitely\n4. Add monitoring to track pool utilization\n\nPrevention:\n- Review pool sizing during load testing\n- Set up alerts for pool utilization at 80%\n- Document pool sizing strategy in runbooks\n- Test deployments under realistic concurrent load",
+  "tags": [
+    "timeout",
+    "api_error",
+    "latency_high",
+    "database",
+    "performance",
+    "infrastructure"
+  ],
+  "confidence": 0.92,
+  "usage_count": 3,
+  "created_at": "2026-03-31T16:45:00Z",
+  "last_used_at": "2026-03-31T18:20:00Z"
+}

@@ -1,0 +1,15 @@
+{
+  "issue_id": "550e8400-e29b-41d4-a716-446655440000",
+  "description": "Database connection timeout during peak traffic",
+  "symptoms": [
+    "timeout",
+    "api_error",
+    "latency_high"
+  ],
+  "environment": {
+    "service": "user-api",
+    "environment": "production",
+    "version": "2.4.1"
+  },
+  "timestamp": "2026-03-31T14:32:00Z"
+}

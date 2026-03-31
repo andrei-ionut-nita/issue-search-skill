@@ -1,0 +1,24 @@
+{
+  "issue_id": "550e8400-e29b-41d4-a716-446655440000",
+  "summary": "Database connection pool exhaustion during peak traffic",
+  "root_cause": "Connection pool configured with size of 10, but peak traffic generates 50+ concurrent requests. Pool exhausted, new requests timeout after 30 seconds.",
+  "resolution": "Increased connection pool size from 10 to 50. Added exponential backoff strategy for connection waits (100ms, 200ms, 400ms). Added monitoring to track pool utilization.",
+  "prevention": "Set pool size to max_expected_concurrent_connections * 1.5 (75 in this case). Load test all deployments to verify pool sizing. Monitor pool utilization in production (alert at 80%).",
+  "symptoms": [
+    "timeout",
+    "api_error",
+    "latency_high"
+  ],
+  "tags": [
+    "database",
+    "performance",
+    "infrastructure"
+  ],
+  "environment": {
+    "service": "user-api",
+    "environment": "production",
+    "version": "2.4.1",
+    "database": "PostgreSQL 14"
+  },
+  "timestamp": "2026-03-31T16:45:00Z"
+}
