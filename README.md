@@ -4,18 +4,38 @@ A local-first, offline-capable knowledge management system for capturing issues,
 
 ## ⚡ Quick Start
 
+### Installation (One Time)
+
 ```bash
-# 1. Setup (one time)
+# Clone into your project
+git clone https://github.com/andrei-ionut-nita/issue-search-skill.git .claude/skills/issue-search-skill
+cd .claude/skills/issue-search-skill
+
+# Run setup
 ./setup.sh
 
-# 2. Capture issue
-python3 scripts/cli.py capture --description "DB timeout" --symptoms timeout
+# DONE! Claude Code now automatically captures & searches issues in the background
+```
 
-# 3. Generate postmortem (after investigation)
-python3 scripts/cli.py postmortem --issue-id {uuid} --root-cause "..." --resolution "..." --prevention "..."
+That's it. **After setup.sh, everything works automatically.** Claude Code will:
+- Search the knowledge base before investigating new errors
+- Prompt you to capture issues
+- Document solutions as postmortems
+- Retrieve past solutions ranked by confidence
 
-# 4. Next similar issue — search and resolve in seconds
-python3 scripts/cli.py search --symptom timeout
+### Manual Usage (Optional)
+
+You can also manually control it:
+
+```bash
+# Search for past solutions
+python3 .claude/skills/issue-search-skill/scripts/cli.py search --symptom timeout
+
+# Capture an issue
+python3 .claude/skills/issue-search-skill/scripts/cli.py capture --description "DB timeout" --symptoms timeout
+
+# Document a solution after fixing it
+python3 .claude/skills/issue-search-skill/scripts/cli.py postmortem --issue-id {uuid} --root-cause "..." --resolution "..." --prevention "..."
 ```
 
 ## Purpose
@@ -30,6 +50,22 @@ python3 scripts/cli.py search --symptom timeout
 4. **Retrieve** proven solutions ranked by relevance and confidence
 5. **Learn** as your knowledge base grows and solutions are reused
 
+## How It Works Automatically
+
+When you run `setup.sh`, it:
+
+1. **Creates `ISSUE_SEARCH.md`** — Configuration file telling Claude Code how to use the skill
+2. **Updates `CLAUDE.md`** — Adds a reference to `ISSUE_SEARCH.md` so Claude reads it every session
+3. **Detects your setup** — Works with both project-level (`.claude/skills/`) and global (`~/.claude/skills/`) installs
+
+Result: Next time you start a Claude Code session, it automatically:
+- Searches the knowledge base when errors occur
+- Prompts you to capture issues
+- Documents solutions as postmortems
+- Retrieves ranked past solutions
+
+**No configuration needed. Just install and it works.**
+
 ## Principles
 
 - **Local-first** — no outbound connections, works completely offline
@@ -38,6 +74,7 @@ python3 scripts/cli.py search --symptom timeout
 - **Zero dependencies** — Python standard library only
 - **Minimal complexity** — 750 lines of code, highly focused
 - **Human-readable** — all JSON/JSONL, fully inspectable
+- **Automatic** — integrates with Claude Code after install, no user configuration needed
 
 ## Directory Structure
 
