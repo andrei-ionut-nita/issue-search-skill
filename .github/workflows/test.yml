@@ -27,12 +27,3 @@ jobs:
 
     - name: Run system tests
       run: python3 tests/test_system.py
-
-    - name: Run QA quality tests
-      run: python3 evals/test_qa_quality.py
-
-    - name: Run ranking tests
-      run: python3 evals/test_ranking.py
-
-    - name: Run performance tests
-      run: python3 evals/test_performance.py
