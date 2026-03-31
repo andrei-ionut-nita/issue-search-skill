@@ -7,6 +7,13 @@ import json
 import tempfile
 from pathlib import Path
 from datetime import datetime, timezone
+import io
+
+# Ensure UTF-8 output on all platforms (fixes Windows encoding issues)
+if sys.stdout.encoding != 'utf-8':
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+if sys.stderr.encoding != 'utf-8':
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
 
 # Add src directory to path for imports
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
