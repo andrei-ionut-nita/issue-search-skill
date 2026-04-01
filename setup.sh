@@ -112,6 +112,32 @@ echo "=========================================="
 echo "[OK] Claude Code integration complete!"
 echo "=========================================="
 echo ""
+
+# ==========================================
+# Register Claude Code hooks
+# ==========================================
+echo "Registering Claude Code hooks..."
+echo ""
+
+SETTINGS_FILE="$HOME/.claude/settings.json"
+REGISTER_HOOKS="$SCRIPT_DIR/scripts/register_hooks.py"
+
+if [ -f "$REGISTER_HOOKS" ]; then
+    if python3 "$REGISTER_HOOKS" "$SETTINGS_FILE" "$SCRIPT_DIR"; then
+        echo ""
+        echo "[OK] Hooks registered successfully!"
+    else
+        echo "[WARN] Failed to register hooks (continuing anyway...)"
+    fi
+else
+    echo "[WARN] Hook registration script not found (continuing anyway...)"
+fi
+
+echo ""
+echo "=========================================="
+echo "[OK] Setup complete!"
+echo "=========================================="
+echo ""
 echo "Next steps:"
 echo "  1. Start a new Claude Code session in this project"
 echo "  2. Claude will automatically search/capture issues in the knowledge base"
@@ -119,4 +145,5 @@ echo "  3. Or manually run: python3 scripts/cli.py capture --help"
 echo "  4. Read docs/QUICKSTART.md for complete reference"
 echo ""
 echo "Knowledge base location: ~/.knowledge_base/"
+echo "Hooks configured in: ~/.claude/settings.json"
 echo ""

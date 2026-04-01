@@ -68,6 +68,31 @@ else
     exit 1
 fi
 
+# Verify hooks are registered
+echo ""
+echo "Verifying hook registration..."
+if python3 -c "
+import json
+from pathlib import Path
+settings_file = Path('$HOME/.claude/settings.json')
+if not settings_file.exists():
+    print('✗ settings.json not found')
+    exit(1)
+with open(settings_file) as f:
+    settings = json.load(f)
+hooks = settings.get('hooks', {})
+post = any('on_bash_error' in json.dumps(h) for h in hooks.get('PostToolUse', []))
+prompt = any('on_prompt_error' in json.dumps(h) for h in hooks.get('UserPromptSubmit', []))
+if not post or not prompt:
+    print('✗ Hooks not registered')
+    exit(1)
+print('✓ Hooks registered')
+" 2>/dev/null; then
+    echo "✓ Hooks verified in settings.json"
+else
+    echo "⚠ Hooks not verified (may not be registered yet)"
+fi
+
 echo ""
 echo "=========================================="
 echo "✓ Installation verified!"
@@ -75,4 +100,8 @@ echo "=========================================="
 echo ""
 echo "You're ready to use the system:"
 echo "  python3 scripts/cli.py capture --description \"...\" --symptoms timeout"
+echo ""
+echo "Hooks will automatically:"
+echo "  • Search the knowledge base when Bash commands fail"
+echo "  • Search when error messages are pasted in chat"
 echo ""
