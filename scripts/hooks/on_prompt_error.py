@@ -20,9 +20,8 @@ def get_cli_path():
     return os.path.join(skill_root, "scripts", "cli.py")
 
 
-# Pattern to detect issues in user prompt
-# Matches code errors (traceback, exceptions) and user-reported problems (broken, doesn't work, etc.)
-# Negative lookahead (?!.*\bno\b) prevents false positives like "no issues with it"
+# Base pattern: detect issue-related keywords in user prompt
+# Covers code errors (traceback, exceptions) and user-reported problems (broken, doesn't work, etc.)
 ISSUE_PATTERNS = re.compile(
     r"(traceback|exception|error:|nameerror|typeerror|valueerror|"
     r"syntaxerror|importerror|filenotfounderror|exit code [1-9]|"
@@ -31,6 +30,21 @@ ISSUE_PATTERNS = re.compile(
     r"doesn't handle|not handling|not following|not respecting|inconsistent)",
     re.IGNORECASE
 )
+
+# False positive filters: legitimate, non-issue uses of issue keywords
+# These patterns indicate the keyword is NOT describing a real problem
+FALSE_POSITIVE_PATTERNS = [
+    r"can't\s+wait",  # excited anticipation
+    r"unable\s+to\s+contain",  # emotional expression
+    r"broken\s+(?:down|out)",  # explanation/analysis or distribution
+    r"break(?:ing)?\s+down",  # explanation/analysis (verb form)
+    r"stopped\s+(?:raining|snowing|hailing)",  # weather
+    r"for\s+maintenance",  # intentional downtime
+    r"by\s+design",  # intentional behavior
+    r"on\s+purpose",  # intentional action
+    r"intentional",  # explicitly intentional
+    r"is\s+expected",  # acknowledged as expected behavior
+]
 
 
 def map_symptom(text):
@@ -57,6 +71,25 @@ def map_symptom(text):
     return "config_error"
 
 
+def should_match_prompt(prompt):
+    """Determine if prompt describes a real issue or a false positive.
+
+    Returns True if:
+    - Prompt contains issue keywords AND
+    - Doesn't match false positive patterns
+    """
+    # Must match base pattern
+    if not ISSUE_PATTERNS.search(prompt):
+        return False
+
+    # Check for false positive indicators
+    for fp_pattern in FALSE_POSITIVE_PATTERNS:
+        if re.search(fp_pattern, prompt, re.IGNORECASE):
+            return False
+
+    return True
+
+
 def main():
     try:
         data = json.load(sys.stdin)
@@ -66,8 +99,8 @@ def main():
         if not prompt:
             sys.exit(0)
 
-        # Check if prompt contains issue patterns
-        if not ISSUE_PATTERNS.search(prompt):
+        # Check if prompt describes a real issue (not a false positive)
+        if not should_match_prompt(prompt):
             sys.exit(0)
 
         # Map to symptom and search knowledge base
