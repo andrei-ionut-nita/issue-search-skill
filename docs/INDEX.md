@@ -20,7 +20,14 @@ This directory contains a complete, offline-capable knowledge management system 
 
 ## For Developers
 
-3. **[ARCHITECTURE.md](ARCHITECTURE.md)** — System design & internals
+3. **[HOOKS.md](HOOKS.md)** — Automatic error detection via system-level hooks (NEW)
+   - How hooks work (PostToolUse, UserPromptSubmit)
+   - Symptom mapping
+   - Hook lifecycle
+   - Configuration and testing
+   - Disabling hooks if needed
+
+4. **[ARCHITECTURE.md](ARCHITECTURE.md)** — System design & internals
    - Module overview (schema, utils, indexer, retriever, cli)
    - Data models and validation
    - Storage strategy (JSONL, JSON, date partitioning)
@@ -28,7 +35,7 @@ This directory contains a complete, offline-capable knowledge management system 
    - Performance characteristics
    - Future extensions
 
-4. **[README.md](README.md)** — High-level overview
+5. **[README.md](README.md)** — High-level overview
    - Purpose and principles
    - Directory structure
    - Data model
@@ -38,7 +45,7 @@ This directory contains a complete, offline-capable knowledge management system 
 
 ## Examples & Learning
 
-5. **[EXAMPLE.md](EXAMPLE.md)** — Walkthrough with real examples
+6. **[EXAMPLE.md](EXAMPLE.md)** — Walkthrough with real examples
    - Capturing an issue
    - Investigating and generating postmortem
    - Retrieving solution
@@ -204,6 +211,7 @@ CAPTURE ISSUE → INVESTIGATE → GENERATE POSTMORTEM → INDEX Q&A → RETRIEVE
 | File | Purpose | Time |
 |------|---------|------|
 | QUICKSTART.md | Get started quickly | 5 min |
+| HOOKS.md | Understand automatic error detection | 5 min |
 | SYSTEM_GUIDE.md | Understand the system | 20 min |
 | ARCHITECTURE.md | Learn how it works | 30 min |
 | EXAMPLE.md | See real examples | 10 min |

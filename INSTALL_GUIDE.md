@@ -83,6 +83,11 @@ python3 scripts/cli.py capture --description "Test issue" --symptoms timeout
 git clone https://github.com/andrei-ionut-nita/issue-search-skill.git .claude/skills/issue-search-skill
 cd .claude/skills/issue-search-skill
 ./setup.sh
+
+# setup.sh will:
+# 1. Create ~/.knowledge_base/ directory
+# 2. Register hooks to ~/.claude/settings.json (automatic)
+# 3. Run tests to verify installation
 ```
 
 ### Option B: User-Level
@@ -92,7 +97,21 @@ cd .claude/skills/issue-search-skill
 git clone https://github.com/andrei-ionut-nita/issue-search-skill.git ~/.claude/skills/issue-search-skill
 cd ~/.claude/skills/issue-search-skill
 ./setup.sh
+
+# setup.sh will:
+# 1. Create ~/.knowledge_base/ directory
+# 2. Register hooks to ~/.claude/settings.json (automatic)
+# 3. Run tests to verify installation
 ```
+
+### After Installation
+
+The hooks are now active in `~/.claude/settings.json`. When you start a Claude Code session:
+
+- **PostToolUse hook** monitors Bash commands — auto-searches KB when a command fails
+- **UserPromptSubmit hook** monitors your messages — auto-searches KB when you describe an error
+
+You don't need to do anything; they activate automatically.
 
 ## Verification
 

@@ -5,6 +5,45 @@ All notable changes to the Issue Search Skill are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-04-01
+
+### Added
+
+- **Claude Code Hooks Integration** — System-level automatic error detection
+  - `PostToolUse` hook (`on_bash_error.py`) — auto-detects Bash failures, searches KB, auto-captures
+  - `UserPromptSubmit` hook (`on_prompt_error.py`) — auto-detects error patterns in user messages
+  - Hook registration system (`register_hooks.py`) with idempotent JSON manipulation
+  - Comprehensive pattern matching with 128 test cases, 100% pass rate
+  - Two-layer detection: base patterns + false positive filtering
+  
+- **Hook Pattern Testing** — Comprehensive validation suite
+  - 128 test cases covering code errors, functional issues, UI problems, logic errors
+  - False positive filtering (excitement, explanations, intentional behavior)
+  - Tests for positive cases (72) and negative cases (56)
+  - Full test suite in `tests/test_hook_patterns.py`
+  
+- **Automatic Installation Integration**
+  - Hooks registered during `setup.sh` installation
+  - Verification in `test_install.sh`
+  - Idempotent hook registration (safe to run setup.sh multiple times)
+  
+- **Documentation**
+  - [docs/HOOKS.md](docs/HOOKS.md) — Hook mechanism, lifecycle, configuration, testing
+
+### Changed
+
+- `setup.sh` — Now registers hooks to `~/.claude/settings.json` automatically
+- `test_install.sh` — Now verifies hook registration in settings.json
+- Hook scripts use path resolution independent of current working directory
+
+### Key Features
+
+- **Pattern Matching**: Detects 25+ issue keywords (code errors, failures, problems, action blocks)
+- **False Positive Filtering**: 10 filters for excitement, explanations, weather, intentional states
+- **Symptom Mapping**: Maps error text to 13 symptom categories (timeout, dependency_failure, auth_failure, etc.)
+- **System-Level Activation**: Hooks bypass CLAUDE.md entirely — guaranteed to execute
+- **Zero User Configuration**: Hooks enabled automatically after setup.sh
+
 ## [1.0.0] - 2026-03-31
 
 ### Added

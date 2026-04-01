@@ -176,11 +176,15 @@ $ # Issue resolved (vs 2 hours originally)
 issue-search-skill/
 ├── SKILL.md                    ← You are here
 ├── README.md
-├── setup.sh                    ← Installation script
-├── test_install.sh             ← Verification script
+├── setup.sh                    ← Installation script (now registers hooks)
+├── test_install.sh             ← Verification script (now checks hooks)
 │
 ├── scripts/
-│   └── cli.py                  ← Main CLI interface
+│   ├── cli.py                  ← Main CLI interface
+│   ├── register_hooks.py        ← Hook registration (idempotent)
+│   └── hooks/
+│       ├── on_bash_error.py     ← PostToolUse hook (detects Bash failures)
+│       └── on_prompt_error.py   ← UserPromptSubmit hook (detects error patterns)
 │
 ├── src/
 │   ├── schema.py               ← Data models
@@ -189,7 +193,8 @@ issue-search-skill/
 │   └── retriever.py            ← Search and ranking
 │
 ├── tests/
-│   └── test_system.py          ← Comprehensive test suite
+│   ├── test_system.py          ← Comprehensive test suite
+│   └── test_hook_patterns.py   ← Hook pattern validation (128 cases)
 │
 ├── docs/
 │   ├── INDEX.md                ← Documentation index
@@ -197,7 +202,8 @@ issue-search-skill/
 │   ├── QUICKSTART.md           ← 5-minute setup
 │   ├── SYSTEM_GUIDE.md         ← Complete user guide
 │   ├── ARCHITECTURE.md         ← System design
-│   └── EXAMPLE.md              ← Walkthrough examples
+│   ├── EXAMPLE.md              ← Walkthrough examples
+│   └── HOOKS.md                ← Hook mechanism & configuration (NEW)
 │
 ├── evals/
 │   ├── test_qa_quality.py      ← Q&A generation quality evaluation
@@ -261,6 +267,25 @@ python3 evals/test_ranking.py
 python3 evals/test_performance.py
 ```
 
+## Automatic Error Detection (via Hooks)
+
+After installation, Claude Code automatically:
+
+1. **Detects Bash command failures** — When you run a command and it fails:
+   - Maps error output to a symptom (timeout, dependency_failure, auth_failure, etc.)
+   - Searches the knowledge base for past solutions
+   - Auto-captures the error for future reference
+   - Shows you matching solutions as a system message
+
+2. **Detects error patterns in your messages** — When you describe an error:
+   - Recognizes patterns like "NameError", "doesn't work", "broken", "can't connect", etc.
+   - Searches the knowledge base for similar past issues
+   - Shows matching solutions immediately
+
+**Why this works**: Hooks are registered at the system level, so Claude Code runs them regardless of whether it reads CLAUDE.md.
+
+See [docs/HOOKS.md](docs/HOOKS.md) for detailed explanation.
+
 ## Design Philosophy
 
 - **Simple > Complex** — 750 lines not 5000
@@ -269,6 +294,7 @@ python3 evals/test_performance.py
 - **Human > Machine** — JSON readable, not binary
 - **Specific > Generic** — controlled vocabulary, validated inputs
 - **Useful > Complete** — core feature excellent, not all features OK
+- **Automatic > Manual** — System-level hooks guarantee execution
 
 ## Performance
 

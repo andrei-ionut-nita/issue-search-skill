@@ -54,17 +54,20 @@ python3 .claude/skills/issue-search-skill/scripts/cli.py postmortem --issue-id {
 
 When you run `setup.sh`, it:
 
-1. **Creates `ISSUE_SEARCH.md`** — Configuration file telling Claude Code how to use the skill
-2. **Updates `CLAUDE.md`** — Adds a reference to `ISSUE_SEARCH.md` so Claude reads it every session
+1. **Registers Claude Code Hooks** — Adds two system-level hooks to `~/.claude/settings.json`:
+   - **PostToolUse** hook: Fires after Bash commands fail → auto-searches KB + auto-captures
+   - **UserPromptSubmit** hook: Fires when you send a message with errors → auto-searches KB
+2. **Creates `ISSUE_SEARCH.md`** — Configuration file telling Claude Code how to use the skill
 3. **Detects your setup** — Works with both project-level (`.claude/skills/`) and global (`~/.claude/skills/`) installs
 
 Result: Next time you start a Claude Code session, it automatically:
-- Searches the knowledge base when errors occur
-- Prompts you to capture issues
-- Documents solutions as postmortems
-- Retrieves ranked past solutions
+- **Hooks detect errors** — System-level hooks execute regardless of CLAUDE.md
+- **Searches the knowledge base** when errors occur (both Bash failures and user-pasted errors)
+- **Auto-captures issues** on Bash failures (you decide on user-reported issues)
+- **Prompts you to document** solutions as postmortems
+- **Retrieves ranked past solutions** from your knowledge base
 
-**No configuration needed. Just install and it works.**
+**Zero configuration needed. Hooks work even if Claude Code doesn't read CLAUDE.md.**
 
 ## Principles
 

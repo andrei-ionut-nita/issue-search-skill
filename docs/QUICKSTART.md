@@ -4,8 +4,23 @@
 
 No external dependencies required. Uses only Python standard library.
 
+### For Claude Code Users
+
 ```bash
-cd skill_maker
+# Clone into your project
+git clone https://github.com/andrei-ionut-nita/issue-search-skill.git .claude/skills/issue-search-skill
+cd .claude/skills/issue-search-skill
+
+# Run setup (registers hooks automatically)
+./setup.sh
+```
+
+That's it! Hooks are now active. When you encounter errors, the system will automatically search your knowledge base for solutions.
+
+### For Manual Installation
+
+```bash
+cd issue-search-skill
 ```
 
 ## Run Tests
@@ -13,7 +28,13 @@ cd skill_maker
 Verify the system works correctly:
 
 ```bash
-python3 test_system.py
+python3 tests/test_system.py
+```
+
+Also verify hook patterns:
+
+```bash
+python3 tests/test_hook_patterns.py
 ```
 
 Expected output:
