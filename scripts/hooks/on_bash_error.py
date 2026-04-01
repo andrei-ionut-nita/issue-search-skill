@@ -23,16 +23,22 @@ def map_symptom(text):
     """Map error output to a symptom category."""
     t = text.lower()
 
-    if any(x in t for x in ["timeout", "timed out"]):
+    if any(x in t for x in ["timeout", "timed out", "deadline exceeded"]):
         return "timeout"
-    if any(x in t for x in ["import", "no module", "not found", "modulenotfounderror"]):
+    if any(x in t for x in ["import", "no module", "not found", "modulenotfounderror", "cannot find"]):
         return "dependency_failure"
-    if any(x in t for x in ["nameerror", "undefined", "nonetype", "attributeerror"]):
+    if any(x in t for x in ["nameerror", "undefined", "nonetype", "attributeerror", "referenceerror"]):
         return "null_pointer"
-    if any(x in t for x in ["auth", "permission denied", "unauthorized", "forbidden"]):
+    if any(x in t for x in ["auth", "permission denied", "unauthorized", "forbidden", "unauthenticated"]):
         return "auth_failure"
-    if any(x in t for x in ["connection", "refused", "network", "unreachable"]):
+    if any(x in t for x in ["connection", "refused", "network", "unreachable", "econnrefused", "offline"]):
         return "api_error"
+    if any(x in t for x in ["out of memory", "memory", "oom", "heap"]):
+        return "memory_leak"
+    if any(x in t for x in ["deadlock", "race condition", "concurrent", "thread"]):
+        return "race_condition"
+    if any(x in t for x in ["corrupt", "data loss", "truncated", "incomplete"]):
+        return "data_loss"
 
     return "config_error"
 

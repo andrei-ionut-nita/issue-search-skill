@@ -20,11 +20,15 @@ def get_cli_path():
     return os.path.join(skill_root, "scripts", "cli.py")
 
 
-# Pattern to detect error mentions in user prompt
-ERROR_PATTERNS = re.compile(
+# Pattern to detect issues in user prompt
+# Matches code errors (traceback, exceptions) and user-reported problems (broken, doesn't work, etc.)
+# Negative lookahead (?!.*\bno\b) prevents false positives like "no issues with it"
+ISSUE_PATTERNS = re.compile(
     r"(traceback|exception|error:|nameerror|typeerror|valueerror|"
     r"syntaxerror|importerror|filenotfounderror|exit code [1-9]|"
-    r"failed|crashed|broken|not working|undefined)",
+    r"failed|failing|crash|crashed|broken|doesn't work|doesn't|not working|"
+    r"(?<!no\s)(?<!no\s)bug|(?<!no\s)problem|wrong|incorrect|undefined|can't|unable to|stopped|stopped working|"
+    r"doesn't handle|not handling|not following|not respecting|inconsistent)",
     re.IGNORECASE
 )
 
@@ -33,16 +37,22 @@ def map_symptom(text):
     """Map error text to a symptom category."""
     t = text.lower()
 
-    if any(x in t for x in ["timeout", "timed out"]):
+    if any(x in t for x in ["timeout", "timed out", "deadline exceeded", "hangs"]):
         return "timeout"
-    if any(x in t for x in ["import", "no module", "modulenotfounderror"]):
+    if any(x in t for x in ["import", "no module", "modulenotfounderror", "dependency", "missing package"]):
         return "dependency_failure"
-    if any(x in t for x in ["nameerror", "attributeerror", "nonetype"]):
+    if any(x in t for x in ["nameerror", "attributeerror", "nonetype", "undefined", "not defined"]):
         return "null_pointer"
-    if any(x in t for x in ["auth", "permission denied", "unauthorized"]):
+    if any(x in t for x in ["auth", "permission", "unauthorized", "forbidden", "login"]):
         return "auth_failure"
-    if any(x in t for x in ["connection", "refused", "network"]):
+    if any(x in t for x in ["connection", "refused", "network", "unreachable", "offline", "down"]):
         return "api_error"
+    if any(x in t for x in ["memory", "out of", "leak", "heap"]):
+        return "memory_leak"
+    if any(x in t for x in ["race", "concurrent", "thread", "lock"]):
+        return "race_condition"
+    if any(x in t for x in ["corrupt", "loss", "truncated", "missing data"]):
+        return "data_loss"
 
     return "config_error"
 
@@ -56,8 +66,8 @@ def main():
         if not prompt:
             sys.exit(0)
 
-        # Check if prompt contains error patterns
-        if not ERROR_PATTERNS.search(prompt):
+        # Check if prompt contains issue patterns
+        if not ISSUE_PATTERNS.search(prompt):
             sys.exit(0)
 
         # Map to symptom and search knowledge base
